@@ -1,0 +1,30 @@
+# 🏛️ Arquitetura do Sistema: Shadow Tracker
+
+O **Shadow Tracker** foi desenhado seguindo princípios de *Clean Architecture*, garantindo que a lógica de negócio esteja totalmente desacoplada da infraestrutura de rede. Este design permite alta manutenibilidade e facilidade de testes.
+
+## Fluxo de Dados
+
+1. **Ingestão (Providers):** Camada de conexão via WebSocket para escuta de eventos.
+2. **Processamento (Engine):** Motor de decisão responsável pelo cálculo de custo de oportunidade e roteamento.
+3. **Telemetria (Logger):** Módulo de auditoria que persiste logs com *timestamps* atômicos para rastreabilidade.
+4. **Insights (Dashboard):** Integração com módulos de BI para projeção e análise financeira.
+
+## Diagrama de Fluxo
+
+```text
+Blockchain WSS --> src/main.py
+src/main.py --> src/decision_engine
+src/decision_engine --> src/logger
+src/logger --> shadow_tracker_enterprise.csv
+shadow_tracker_enterprise.csv --> Dashboard BI
+
+
+Decisões Técnicas
+
+Assincronismo: Utilização de asyncio para suportar alta concorrência e baixa latência em operações de rede.
+
+Modularidade: Cada componente possui uma responsabilidade única (SRP), facilitando testes unitários e extensibilidade do sistema.
+
+Segurança: Gestão de credenciais e chaves de API externa ao versionamento, garantindo a proteção do ambiente de produção.
+
+Qualidade: Estrutura focada em Test-Driven Development (TDD), com suíte de testes unitários para o motor de decisão.
